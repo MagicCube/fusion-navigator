@@ -11,7 +11,13 @@ FusionNavigator::FusionNavigator(Joystick *joystick, Encoder *encoder, uint8_t s
   _shiftButtonPin = shiftButtonPin;
 }
 
+FusionNavState FusionNavigator::state() {
+  return _state;
+}
+
 void FusionNavigator::begin() {
+  _state = FusionNavState::INACTIVE;
+  _zooming = false;
   _lastUpdateTime = 0;
   _encoderValue = 0;
   _encoder->write(0);
@@ -25,51 +31,69 @@ void FusionNavigator::update() {
   if (millis() - _lastUpdateTime > _updateInterval) {
     // Update joystick
     _joystick->update();
+
     // Check if encoder has been changed.
-    int32_t encoderValue = _encoder->read();
-    int delta = 0;
-    if (_encoderValue != encoderValue) {
-      delta = encoderValue - _encoderValue;
-      _encoderValue = encoderValue;
-    }
+    int delta = _updateEncoder();
+
     if (_joystick->isActive()) {
-      if (abs(delta) <= SCROLL_DIFFICULTY_WHEN_MOVING) {
-        delta = 0;
-      }
-    }
-    if (delta != 0 || _joystick->isActive()) {
-      if (!_active && _joystick->isActive()) {
-        // NOTE: The value of shift key is inversed.
+      if (_state == FusionNavState::INACTIVE) {
+        // Newly started movement detected
         if (digitalRead(_shiftButtonPin) == HIGH) {
+          _state = FusionNavState::ORBITING;
+          // Hold the Shift key
           Keyboard.press(HID_KEYBOARD_LEFT_SHIFT);
+        } else {
+          _state = FusionNavState::PANNING;
+        }
+        // Hold the middle button
+        Mouse.press('\010');
+      }
+      uint8_t speed = _state == FusionNavState::PANNING ? PAN_SPEED : ORBIT_SPEED;
+      int8_t x = _joystick->x() * speed / 512;
+      int8_t y = _joystick->y() * speed / 512;
+
+      if (delta) {
+        if (!_zooming) {
+          if (delta >= 2) {
+            _zooming = true;
+          }
+        }
+      } else {
+        _zooming = false;
+      }
+
+      Mouse.move(x, y, _zooming ? delta : 0);
+    } else {
+      // Joystick is not active
+      if (delta != 0) {
+        // If zooming
+        _zooming = true;
+        Mouse.move(0, 0, delta);
+      } else {
+        _zooming = false;
+        if (_state != FusionNavState::INACTIVE) {
+          _deactive();
         }
       }
-
-      _active = true;
-      // Send changes to HID if the joystick or wheel moved.
-      auto x = _joystick->x() / JOYSTICK_FACTOR;
-      auto y = _joystick->y() / JOYSTICK_FACTOR;
-
-      // [Mouse]
-      if (_joystick->isActive()) {
-        // Press the middle button
-        Mouse.press('\010');
-      } else {
-        // Release when scrolling only
-        Mouse.releaseAll();
-      }
-      Mouse.move(x, y, delta);
-    } else {
-      if (_active) {
-        _releaseAll();
-      }
-      _active = false;
     }
+
+    // Remember the current time
     _lastUpdateTime = millis();
   }
 }
 
-void FusionNavigator::_releaseAll() {
+int FusionNavigator::_updateEncoder() {
+  int32_t encoderValue = _encoder->read();
+  int delta = 0;
+  if (_encoderValue != encoderValue) {
+    delta = encoderValue - _encoderValue;
+    _encoderValue = encoderValue;
+  }
+  return delta;
+}
+
+void FusionNavigator::_deactive() {
   Mouse.releaseAll();
   Keyboard.releaseAll();
+  _state = FusionNavState::INACTIVE;
 }

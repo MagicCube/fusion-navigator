@@ -4,13 +4,18 @@
 
 #include <Encoder.h>
 
-#include "settings.h";
+#include "settings.h"
 
 #include "Joystick.h"
+
+enum class FusionNavState { INACTIVE, PANNING, ORBITING };
 
 class FusionNavigator {
 public:
   FusionNavigator(Joystick *joystick, Encoder *encoder, uint8_t shiftPin);
+
+  FusionNavState state();
+  bool isZooming();
 
   void begin();
   void update();
@@ -18,9 +23,11 @@ public:
   void printDebug();
 
 private:
-  void _releaseAll();
+  int _updateEncoder();
+  void _deactive();
 
-  bool _active = false;
+  FusionNavState _state = FusionNavState::INACTIVE;
+  bool _zooming = false;
 
   Joystick *_joystick = NULL;
   Encoder *_encoder = NULL;
