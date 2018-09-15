@@ -1,1 +1,4 @@
-#define UPDATE_INTERVAL 50
+#define UPDATE_INTERVAL 80
+
+#define PAN_SPEED 42
+#define ORBIT_SPEED 32
