@@ -21,8 +21,8 @@ private:
   int _x = 0;
   int _y = 0;
 
-  int8_t _offsetX = 1;
-  int8_t _offsetY = -5;
+  int8_t _adjustX = 1;
+  int8_t _adjustY = -5;
 
   uint8_t _xPin = 0;
   uint8_t _yPin = 0;
