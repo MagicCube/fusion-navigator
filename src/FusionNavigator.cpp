@@ -89,7 +89,7 @@ int FusionNavigator::_updateEncoder() {
     delta = encoderValue - _encoderValue;
     _encoderValue = encoderValue;
   }
-  return delta;
+  return -delta;
 }
 
 void FusionNavigator::_deactive() {
