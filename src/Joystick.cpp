@@ -54,7 +54,6 @@ void Joystick::update() {
     if (_x != x || _y != y) {
       _x = x;
       _y = y;
-      printDebug();
     }
 
     _lastUpdateTime = millis();
