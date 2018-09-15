@@ -27,8 +27,8 @@ void Joystick::begin() {
 
 void Joystick::update() {
   if (millis() - _lastUpdateTime > _updateInterval) {
-    int x = analogRead(_xPin) - 512 - _adjustX;
-    int y = analogRead(_yPin) - 512 - _adjustY;
+    int x = analogRead(_xPin) - 512 - _adjustmentX;
+    int y = analogRead(_yPin) - 512 - _adjustmentY;
 
     if (abs(x) <= MIN_CHANGE) {
       x = 0;
@@ -55,6 +55,8 @@ void Joystick::update() {
       _x = x;
       _y = y;
     }
+
+    printDebug();
 
     _lastUpdateTime = millis();
   }
