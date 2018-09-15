@@ -1,11 +1,13 @@
-#include <Arduino.h>
+#pragma once
 
+#include <Arduino.h>
 class Joystick {
 public:
   Joystick(uint8_t xPin, uint8_t yPin);
 
   int x();
   int y();
+  bool isActive();
 
   void begin();
   void update();

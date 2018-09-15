@@ -15,6 +15,10 @@ int Joystick::y() {
   return _y;
 }
 
+bool Joystick::isActive() {
+  return _x != 0 || _y != 0;
+}
+
 void Joystick::begin() {
   _x = 0;
   _y = 0;
