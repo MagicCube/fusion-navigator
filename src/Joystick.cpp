@@ -56,7 +56,9 @@ void Joystick::update() {
       _y = y;
     }
 
-    printDebug();
+    // Print debug for adjustment:
+    // Each Joystick needs a specified re-adjustment.
+    // printDebug();
 
     _lastUpdateTime = millis();
   }
