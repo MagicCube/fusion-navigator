@@ -4,6 +4,8 @@
 
 #include <Encoder.h>
 
+#include "settings.h";
+
 #include "Joystick.h"
 
 class FusionNavigator {
@@ -27,5 +29,5 @@ private:
   int32_t _encoderValue = 0;
 
   unsigned long _lastUpdateTime = 0;
-  uint8_t _updateInterval = 50;
+  uint8_t _updateInterval = UPDATE_INTERVAL;
 };

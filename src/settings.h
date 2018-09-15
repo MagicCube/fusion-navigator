@@ -1,0 +1,1 @@
+#define UPDATE_INTERVAL 50

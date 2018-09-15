@@ -1,6 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+
+#include "settings.h"
+
 class Joystick {
 public:
   Joystick(uint8_t xPin, uint8_t yPin);
@@ -24,6 +27,6 @@ private:
   uint8_t _xPin = 0;
   uint8_t _yPin = 0;
 
-  unsigned int _updateInterval = 50;
+  unsigned int _updateInterval = UPDATE_INTERVAL;
   unsigned long _lastUpdateTime = 0;
 };
