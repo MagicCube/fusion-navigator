@@ -7,6 +7,9 @@
 #define ENCODER_DT_PIN 3
 #define ENCODER_SW_PIN 4
 
+// User Customizable Button pins
+#define BUTTON_1_PIN 5
+
 // Each Joystick need re-adjust before use.
 // #define JOYSTICK_ADJUSTING true
 // #define JOYSTICK_ADJUSTMENT_X 0

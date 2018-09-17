@@ -5,10 +5,12 @@
 const uint8_t JOYSTICK_FACTOR = 28;
 const uint8_t SCROLL_DIFFICULTY_WHEN_MOVING = 5;
 
-FusionNavigator::FusionNavigator(Joystick *joystick, Encoder *encoder, uint8_t shiftButtonPin) {
+FusionNavigator::FusionNavigator(Joystick *joystick, Encoder *encoder, uint8_t shiftButtonPin,
+                                 uint8_t button1Pin) {
   _joystick = joystick;
   _encoder = encoder;
   _shiftButtonPin = shiftButtonPin;
+  _button1Pin = button1Pin;
 }
 
 FusionNavState FusionNavigator::state() {
@@ -23,6 +25,7 @@ void FusionNavigator::begin() {
   _encoder->write(0);
   _joystick->begin();
   pinMode(_shiftButtonPin, INPUT_PULLUP);
+  pinMode(_button1Pin, INPUT_PULLUP);
   Mouse.begin();
   Keyboard.begin();
 }
@@ -77,6 +80,8 @@ void FusionNavigator::update() {
       }
     }
 
+    _updateButtons();
+
     // Remember the current time
     _lastUpdateTime = millis();
   }
@@ -90,6 +95,24 @@ int FusionNavigator::_updateEncoder() {
     _encoderValue = encoderValue;
   }
   return -delta;
+}
+
+void FusionNavigator::_updateButtons() {
+  if (digitalRead(BUTTON_1_PIN) == LOW) {
+    if (!_button1Pressed) {
+      _button1Pressed = true;
+      Keyboard.press(HID_KEYBOARD_LEFT_CONTROL);
+      Keyboard.press(HID_KEYBOARD_LEFT_ALT);
+      Keyboard.press(HID_KEYBOARD_H_AND_H);
+      Keyboard.release(HID_KEYBOARD_LEFT_CONTROL);
+      Keyboard.release(HID_KEYBOARD_LEFT_ALT);
+      Keyboard.release(HID_KEYBOARD_H_AND_H);
+    }
+  } else {
+    if (_button1Pressed) {
+      _button1Pressed = false;
+    }
+  }
 }
 
 void FusionNavigator::_deactive() {
