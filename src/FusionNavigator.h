@@ -19,8 +19,6 @@ public:
   void begin();
   void update();
 
-  void printDebug();
-
 private:
   int _updateEncoder();
   void _updateButtons();
