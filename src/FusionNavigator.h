@@ -25,17 +25,16 @@ private:
 
   void _deactive();
 
+  uint8_t _shiftButtonPin = 0;
+  uint8_t _button1Pin = 0;
+
   FusionNavState _state = FusionNavState::INACTIVE;
   bool _zooming = false;
+  int32_t _encoderValue = 0;
+  bool _button1Pressed = false;
 
   Joystick *_joystick = NULL;
   Encoder *_encoder = NULL;
-  uint8_t _shiftButtonPin = 0;
-
-  uint8_t _button1Pin = 0;
-  bool _button1Pressed = false;
-
-  int32_t _encoderValue = 0;
 
   unsigned long _lastUpdateTime = 0;
   uint8_t _updateInterval = UPDATE_INTERVAL;
