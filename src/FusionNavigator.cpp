@@ -52,8 +52,7 @@ void FusionNavigator::update() {
         } else {
           _state = FusionNavState::PANNING;
         }
-        // Hold the middle button
-        Mouse.press('\010');
+        Mouse.press(MOUSE_MIDDLE);
       }
       uint8_t speed = _state == FusionNavState::PANNING ? PAN_SPEED : ORBIT_SPEED;
       int8_t x = _joystick->x() * speed / 512;
