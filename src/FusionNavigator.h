@@ -3,10 +3,9 @@
 #include <Arduino.h>
 
 #include <Encoder.h>
+#include <Joystick.h>
 
 #include "settings.h"
-
-#include "Joystick.h"
 
 enum class FusionNavState { INACTIVE, PANNING, ORBITING };
 
