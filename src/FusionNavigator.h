@@ -23,7 +23,7 @@ private:
   int _updateEncoder();
   void _updateButtons();
 
-  void _deactive();
+  void _releaseAll();
 
   uint8_t _shiftButtonPin = 0;
   uint8_t _button1Pin = 0;

@@ -80,7 +80,8 @@ void FusionNavigator::update() {
       } else {
         _zooming = false;
         if (_state != FusionNavState::INACTIVE) {
-          _deactive();
+          _releaseAll();
+          _state = FusionNavState::INACTIVE;
         }
       }
     }
@@ -120,8 +121,7 @@ void FusionNavigator::_updateButtons() {
   }
 }
 
-void FusionNavigator::_deactive() {
+void FusionNavigator::_releaseAll() {
   Mouse.releaseAll();
   Keyboard.releaseAll();
-  _state = FusionNavState::INACTIVE;
 }
