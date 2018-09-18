@@ -42,7 +42,7 @@ void FusionNavigator::update() {
     // Check if encoder has been changed.
     int delta = _updateEncoder();
 
-    if (_joystick->isActive()) {
+    if (_joystick->isPulled()) {
       if (_state == FusionNavState::INACTIVE) {
         // Newly started movement detected
         if (digitalRead(_shiftButtonPin) == HIGH) {
@@ -58,6 +58,8 @@ void FusionNavigator::update() {
       int8_t x = _joystick->x() * speed / 512;
       int8_t y = _joystick->y() * speed / 512;
 
+      // Since I don't like zooming while orbiting or moving,
+      // I add some difficulties to trigger zooming.
       if (delta) {
         if (!_zooming) {
           if (delta >= 2) {
@@ -70,7 +72,7 @@ void FusionNavigator::update() {
 
       Mouse.move(x, y, _zooming ? delta : 0);
     } else {
-      // Joystick is not active
+      // Joystick is not pulled
       if (delta != 0) {
         // If zooming
         _zooming = true;

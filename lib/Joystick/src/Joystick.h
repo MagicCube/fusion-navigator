@@ -25,7 +25,7 @@ public:
   int y();
 
   // Gets a boolean indicates whether the joystick has been pulled.
-  bool isActive();
+  bool isPulled();
 
   // Initialize the joystcik.
   void begin();

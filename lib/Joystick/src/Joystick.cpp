@@ -17,7 +17,7 @@ int Joystick::y() {
   return _y;
 }
 
-bool Joystick::isActive() {
+bool Joystick::isPulled() {
   return _x != 0 || _y != 0;
 }
 
