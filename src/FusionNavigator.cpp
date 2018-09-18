@@ -36,7 +36,7 @@ void FusionNavigator::update() {
     _joystick->update();
 
     if (JOYSTICK_CALIBRATING) {
-      printDebug();
+      _joystick->printDebug();
     }
 
     // Check if encoder has been changed.
