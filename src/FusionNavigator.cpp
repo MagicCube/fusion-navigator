@@ -35,6 +35,10 @@ void FusionNavigator::update() {
     // Update joystick
     _joystick->update();
 
+    if (JOYSTICK_CALIBRATING) {
+      printDebug();
+    }
+
     // Check if encoder has been changed.
     int delta = _updateEncoder();
 
