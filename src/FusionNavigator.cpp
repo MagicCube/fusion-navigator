@@ -55,8 +55,8 @@ void FusionNavigator::update() {
         Mouse.press(MOUSE_MIDDLE);
       }
       uint8_t speed = _state == FusionNavState::PANNING ? PAN_SPEED : ORBIT_SPEED;
-      int8_t x = _joystick->x() * speed / 512;
-      int8_t y = _joystick->y() * speed / 512;
+      int8_t x = _joystick->x() * (JOYSTICK_REVERSE_X ? -1 : 1) * speed / 512;
+      int8_t y = _joystick->y() * (JOYSTICK_REVERSE_Y ? -1 : 1) * speed / 512;
 
       // Since I don't like zooming while orbiting or moving,
       // I add some difficulties to trigger zooming.
@@ -100,7 +100,7 @@ int FusionNavigator::_updateEncoder() {
     delta = encoderValue - _encoderValue;
     _encoderValue = encoderValue;
   }
-  return -delta;
+  return delta * (ENCODER_REVERSE ? -1 : 1);
 }
 
 void FusionNavigator::_updateButtons() {
